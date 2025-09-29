@@ -8,9 +8,9 @@ The main source of revenue will be Advertisement Panels and Subscriptions. Maybe
 where players can get things to enhance learning and enjoyment inside their individual games.
 
 Includes:
-- Scenes for gameplay and menus
-- Scripts for game logic
-- Assets for images and sounds
+- Functions for gameplay and menus
+- Scripts for game logic and connecting function
+
 
 ## Team
 - Julius Carter
@@ -19,5 +19,5 @@ Includes:
 
 ## How to run this Project
 1. Clone the repository
-2. Open the godot project file(Version 4.2)
-3. Run the main scene
+2. Open the HTML,CSS, and JS files
+3. Run the code in a live server extension
