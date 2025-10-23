@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Skill Issue Learning Game</title>
+  <title>Skill Issue Game</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
 </head>
 <body>
   <h1>Skill Issue Main Menu</h1>
-  <p id="message">Click the button to start!</p>
   <button id="startBtn">Start Game</button>
-  <button id="settingsBtn">Settings</button>
-  <button id="infoBtn">Info</button>
+    <!-- Persistent main menu button (always visible) -->
+    <button id="mainMenuBtn" aria-label="Main Menu">Main Menu</button>
+  <div id="panel">
+    <h2 id="panel-title"></h2>
+    <p id="panel-text"></p>
+    <div id="panel-choices"></div>
+  </div>
 
-  <script src="script.js"></script>
+  <script src = "script.js"></script>
 </body>
 </html>
