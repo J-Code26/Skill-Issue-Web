@@ -7,13 +7,20 @@
 </head>
 <body>
   <h1>Skill Issue Main Menu</h1>
-  <button id="startBtn">Start Game</button>
-    <!-- Persistent main menu button (always visible) -->
-    <button id="mainMenuBtn" aria-label="Main Menu">Main Menu</button>
-  <div id="panel">
+    <div>
+        <button id="startBtn">Start Game</button>
+        <button id="mainMenuBtn" aria-label="Main Menu">Main Menu</button>
+    </div>
+
+  <div id="panel" style="display: none;">
     <h2 id="panel-title"></h2>
     <p id="panel-text"></p>
     <div id="panel-choices"></div>
+  </div>
+  <div id=""scoreboard>
+      <p> Correct: <span id="correctCount">0</span></p>
+      <p> Wrong:  <span id="wrongCount">0</span></p>
+      <p id="message"></p>
   </div>
 
   <script src = "script.js"></script>
