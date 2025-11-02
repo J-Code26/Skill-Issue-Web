@@ -20,7 +20,15 @@
   <div id="scoreboard">
       <p> Correct: <span id="correctCount">0</span></p>
       <p> Wrong:  <span id="wrongCount">0</span></p>
+      <p>Skill: <span id="skillCount">0</span></p>
+      <p>Life Points: <span id="lifePoints"></span></p>
       <p id="message"></p>
+  </div>
+  <div id="shop" style="display:none;">
+      <h2>Skill Shop</h2>
+      <button class="shop-item" data-cost="5" data-reward="life">Extra Life - 5 Skill</button>
+      <button class="shop-item" data-cost="10" data-reward="double">skill x2 - 10 skill</button>
+      <button id="continueBtn">Continue</button>
   </div>
 
   <script src = "script.js"></script>
