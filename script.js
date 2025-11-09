@@ -275,6 +275,7 @@ const continueBtn = document.getElementById("continueBtn");
 const shop = document.getElementById("shop");
 const lifeDisplay = document.getElementById("lifePoints");
 const skillCountDisplay = document.getElementById("skillCount");
+const settingsBtn = document.getElementById("settingsBtn");
 // ---------- Show question ----------
 function showQuestion() {
     const q = questions[currentIndex];
@@ -373,6 +374,8 @@ function updateSkillDisplay() {
 }
 
 
+
+
 // ---------- Button events ----------
 startBtn.onclick = () => {
     startBtn.style.display = "none";
@@ -418,6 +421,14 @@ mainMenuBtn.onclick = () => {
     skillDisplay.textContent = skillCount;
     lifeDisplay.textContent = lifePoints;
 };
+
+settingsBtn.onclick = () => {
+    message.textContent = "";
+    panel.style.display = "none";
+    startBtn.style.display = "inline-block";
+    shop.style.display = "none";
+
+}
 
 // --- Initialize display on page load ---
 function initializeDisplay() {

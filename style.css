@@ -26,8 +26,20 @@ body {
   z-index: 1100; /* above overlay */
   background: #2ecc71;
   color: white;
-  border: none;
   border-radius: 6px;
+}
+
+#settingsBtn {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1100;
+    margin: 0;
+    padding: 10px 20px;
+    background: #2ecc71;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
 }
 
 #message {
