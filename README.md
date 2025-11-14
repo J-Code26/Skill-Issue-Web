@@ -20,4 +20,4 @@ Includes:
 ## How to run this Project
 1. Clone the repository
 2. Open the HTML,CSS, and JS files
-3. Run the code in a live server extension
+3. Run the HTML file in a live server extension
