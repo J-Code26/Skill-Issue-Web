@@ -6,32 +6,60 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Skill Issue Main Menu</h1>
-    <div>
-        <button id="startBtn">Start Game</button>
-        <button id="mainMenuBtn" aria-label="Main Menu">Main Menu</button>
-        <button id="settingsBtn" aria-label="Settings">Settings</button>
+
+<div class="page-layout">
+
+    <!-- LEFT AD -->
+    <div class="side-ad left-ad">
+        <img src="ads/ad_part_1.png" alt="Left Ad">
+        <img src="ads/ad_part_2.png" alt="Left Ad 2">
     </div>
 
-  <div id="panel" style="display: none;">
-    <h2 id="panel-title"></h2>
-    <p id="panel-text"></p>
-    <div id="panel-choices"></div>
-  </div>
-  <div id="scoreboard">
-      <p> Correct: <span id="correctCount">0</span></p>
-      <p> Wrong:  <span id="wrongCount">0</span></p>
-      <p>Skill: <span id="skillCount">0</span></p>
-      <p>Life Points: <span id="lifePoints"></span></p>
-      <p id="message"></p>
-  </div>
-  <div id="shop" style="display:none;">
-      <h2>Skill Shop</h2>
-      <button class="shop-item" data-cost="5" data-reward="life">Extra Life - 5 Skill</button>
-      <button class="shop-item" data-cost="10" data-reward="double">skill x2 - 10 skill</button>
-      <button id="continueBtn">Continue</button>
-  </div>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
 
-  <script src = "script.js"></script>
+        <h1>Skill Issue Main Menu</h1>
+        <div>
+            <button id="startBtn">Start Game</button>
+            <button id="mainMenuBtn" aria-label="Main Menu">Main Menu</button>
+            <button id="settingsBtn" aria-label="Settings">Settings</button>
+        </div>
+      
+        <div id="panel" style="display: none;">
+            <h2 id="panel-title"></h2>
+            <p id="panel-text"></p>
+            <div id="panel-choices"></div>
+        </div>
+
+        <div id="scoreboard">
+            <p> Correct: <span id="correctCount">0</span></p>
+            <p> Wrong:  <span id="wrongCount">0</span></p>
+            <p>Skill: <span id="skillCount">0</span></p>
+            <p>Life Points: <span id="lifePoints"></span></p>
+            <p id="message"></p>
+        </div>
+
+        <div id="shop" style="display:none;">
+            <h2>Skill Shop</h2>
+            <button class="shop-item" data-cost="5" data-reward="life">Extra Life - 5 Skill</button>
+            <button class="shop-item" data-cost="10" data-reward="double">skill x2 - 10 skill</button>
+            <button id="continueBtn">Continue</button>
+        </div>
+
+        <div class="rotating-ad">
+            <img id="adBanner" src="ads/ad_part_3.png" alt="Rotating Ad">
+        </div>
+
+    </div>
+
+    <!-- RIGHT AD -->
+    <div class="side-ad right-ad">
+        <img src="ads/ad_part_3.png" alt="Right Ad">
+        <img src="ads/ad_part_4.png" alt="Right Ad 2">
+    </div>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>

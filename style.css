@@ -1,8 +1,74 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background-color: gray;
   font-family: Arial, sans-serif;
   text-align: center;
-  margin-top: 50px;
+  padding: 20px;
+}
+
+/* Layout structure */
+.page-layout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+/* Sidebar ads */
+.side-ad {
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.side-ad img {
+  width: 100%;
+  border-radius: 8px;
+}
+/* Main content */
+.main-content {
+  flex: 1;
+  max-width: 800px;
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Buttons */
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #3498db;
+  color: white;
+}
+
+#mainMenuBtn {
+  position: fixed;
+  left: 12px;
+  top: 12px;
+  z-index: 1100;
+  background: #2ecc71;
+}
+
+#settingsBtn {
+  position: fixed;
+  right: 12px;
+  top: 12px;
+  z-index: 1100;
+  background: #2ecc71;
 }
 
 #panel {
@@ -10,44 +76,86 @@ body {
   margin-top: 20px;
   padding: 20px;
   border: 2px solid #333;
+  background-color: #fff;
+  border-radius: 8px;
 }
 
-#panel button {
-  margin: 5px;
-  padding: 10px 20px;
+/* Scoreboard */
+#scoreboard {
+  margin-top: 20px;
+  background-color: #ddd;
+  padding: 15px;
+  border-radius: 10px;
 }
 
-#mainMenuBtn {
-  margin-right: 10px;
+#scoreboard p {
+  margin: 8px 0;
+  font-weight: bold;
+}
+
+/* Message box */
+#message {
+  background: goldenrod;
+  color: white;
+  border-radius: 5px;
+  max-width: 300px;
+  margin: 20px auto;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Shop section */
+#shop {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #333;
+}
+.shop-item {
+  display: block;
+  margin: 10px auto;
   padding: 10px 20px;
-  position: fixed;
-  left: 12px;
-  top: 12px;
-  z-index: 1100; /* above overlay */
-  background: #2ecc71;
+  background-color: #e67e22;
   color: white;
   border-radius: 6px;
+  cursor: pointer;
 }
 
-#settingsBtn {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    z-index: 1100;
-    margin: 0;
-    padding: 10px 20px;
-    background: #2ecc71;
-    color: white;
-    cursor: pointer;
-    border-radius: 6px;
+/* Rotating ad */
+.rotating-ad {
+  margin-top: 20px;
 }
 
-#message {
-    background : goldenrod;
-    color: white;
-    border-radius: 5px;
-    max-width: 300px;      /* keeps it from going across the whole screen */
-    margin: 20px auto;     /* centers it */
-    text-align: center;    /* centers text inside */
-
+.rotating-ad img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 10px;
 }
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .page-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .side-ad {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+   .main-content {
+    margin: 20px 0;
+  }
+
+  #mainMenuBtn,
+  #settingsBtn {
+    position: static;
+    margin: 10px;
+  }
+}
+
+
+

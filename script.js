@@ -442,5 +442,16 @@ function initializeDisplay() {
 function showWelcomeMessage() {
     message.textContent = "Welcome! Press Start to begin! You get a chance in the Shop every 5 questions! Once your life runs out, or your complete all the questions, the game is over!";
 }
+const ads = [
+    "ads/ad_part_1.png",
+    "ads/ad_part_2.png",
+    "ads/ad_part_3.png",
+    "ads/ad_part_4.png"
+];
 
-window.onload = initializeDisplay;
+let index = 0;
+
+setInterval(() => {
+    index = (index + 1) % ads.length;
+    document.getElementById("adBanner").src = ads[index];
+}, 3000);
