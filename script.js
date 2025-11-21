@@ -339,6 +339,22 @@ function showShop(){
     shop.style.display = "block";
 }
 
+function activatePowerUp(type){
+    const container = document.getElementById("powerUpDisplay");
+
+    if(document.getElementById(type + "-icon")) return;
+
+    const img = document.createElement("img");
+    img.id = type + "-icon";
+    img.src = `sprites/${type}.jpg`;
+    img.style.width = "40px";
+    img.style.margin = "0 5px";
+    img.style.filter = "drop-shadow(0px 0px 4px yellow)";
+    container.appendChild(img);
+
+
+}
+
 document.querySelectorAll(".shop-item").forEach(btn =>{
     btn.addEventListener("click", () => {
         let cost = parseInt(btn.dataset.cost);
@@ -351,12 +367,13 @@ document.querySelectorAll(".shop-item").forEach(btn =>{
                 lifePoints += 5;
                 lifeDisplay.textContent = lifePoints;
                 message.textContent = "+5 Life Points!"
+                activatePowerUp("life");
             }
             if(btn.dataset.reward === "double"){
                 skillMultiplier = 2;
                 message.textContent = "Skill x2 Activated";
                 updateSkillDisplay();
-
+                activatePowerUp("double");
             }
 
             btn.disabled = true;
