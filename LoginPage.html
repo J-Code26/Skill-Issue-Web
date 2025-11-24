@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+</head>
+<body>
+    <h2>Login</h2>
+
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+
+    <button id="loginBtn">Log In</button>
+    <button id="signupBtn">Sign Up</button>
+
+    <p id="loginMsg"></p>
+    <script type="module" src="login.js"></script>
+
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js"></script>
+    <script>
+        // Your Firebase config (same as game page)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBbgSazwxVUp-zFbvEW0mu6myuKtR_VeIE",
+            authDomain: "skill-issue-web.firebaseapp.com",
+            projectId: "skill-issue-web",
+            storageBucket: "skill-issue-web.firebasestorage.app",
+            messagingSenderId: "850520466993",
+            appId: "1:850520466993:web:39f10757d065269e9c1710",
+            measurementId: "G-L90L1TN647"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const loginMsg = document.getElementById('loginMsg');
+
+        loginBtn.onclick = () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    // Redirect to the game page after successful login
+                    window.location.href = "index.html";
+                })
+                .catch(error => {
+                    loginMsg.textContent = error.message;
+                });
+        }
+
+        signupBtn.onclick = () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    loginMsg.textContent = "Account created! You can now log in.";
+                })
+                .catch(error => {
+                    loginMsg.textContent = error.message;
+                });
+        }
+    </script>
+
+</body>
+</html>
+
+

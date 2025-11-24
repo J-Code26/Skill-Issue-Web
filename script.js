@@ -1,3 +1,34 @@
+
+
+import { auth, db } from "./firebase.js";
+import {
+    getFirestore,
+    updateDoc,
+    doc,
+    getDoc,
+    setDoc
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+let currentUser;
+
+// Load user stats when logged in
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        currentUser = user;
+
+        const ref = doc(db, "users", user.uid);
+        const snap = await getDoc(ref);
+
+        if (snap.exists()) {
+            const data = snap.data();
+            correctCount.textContent = data.correct;
+            wrongCount.textContent = data.wrong;
+            skillCount.textContent = data.skill;
+            lifePoints.textContent = data.life;
+        }
+    }
+});
+
 // ---------- Questions ----------
 const questions = [
     {
@@ -275,7 +306,7 @@ const continueBtn = document.getElementById("continueBtn");
 const shop = document.getElementById("shop");
 const lifeDisplay = document.getElementById("lifePoints");
 const skillCountDisplay = document.getElementById("skillCount");
-const settingsBtn = document.getElementById("settingsBtn");
+const loginBtn = document.getElementById("loginBtn");
 // ---------- Show question ----------
 function showQuestion() {
     const q = questions[currentIndex];
@@ -297,11 +328,13 @@ function checkAnswer(selected, correct) {
         correctCount++;
         skillCount += skillMultiplier;
         message.textContent = "Correct! +1 skill!";
+        saveStats();
 
     } else {
         wrongCount++;
         lifePoints--;
         message.textContent = `Wrong! -1 Life Point!`;
+        saveStats();
     }
 
     correctDisplay.textContent = correctCount;
@@ -367,13 +400,14 @@ document.querySelectorAll(".shop-item").forEach(btn =>{
                 lifePoints += 5;
                 lifeDisplay.textContent = lifePoints;
                 message.textContent = "+5 Life Points!"
-                activatePowerUp("life");
+                activatePowerUp("PLUS5PowerUp");
+                saveStats();
             }
             if(btn.dataset.reward === "double"){
                 skillMultiplier = 2;
                 message.textContent = "Skill x2 Activated";
                 updateSkillDisplay();
-                activatePowerUp("double");
+                activatePowerUp("X2PowerUp");
             }
 
             btn.disabled = true;
@@ -439,11 +473,8 @@ mainMenuBtn.onclick = () => {
     lifeDisplay.textContent = lifePoints;
 };
 
-settingsBtn.onclick = () => {
-    message.textContent = "";
-    panel.style.display = "none";
-    startBtn.style.display = "inline-block";
-    shop.style.display = "none";
+loginBtn.onclick = () => {
+    window.location.href = "LoginPage.html";
 
 }
 
@@ -468,7 +499,27 @@ const ads = [
 
 let index = 0;
 
+const adBanner = document.getElementById("adBanner");
+adBanner.style.cursor = "pointer";
+
 setInterval(() => {
     index = (index + 1) % ads.length;
     document.getElementById("adBanner").src = ads[index];
 }, 3000);
+
+adBanner.addEventListener("click", () => {
+    window.open("https://github.com/J-Code26/Skill-Issue-Web.git", "_blank");
+});
+
+
+async function saveStats() {
+    if (!currentUser) return;
+
+    await setDoc(doc(db, "users", currentUser.uid), {
+        correct: correctCount,
+        wrong: wrongCount,
+        skill: skillCount,
+        life: lifePoints,
+    }, { merge: true });
+}
+
