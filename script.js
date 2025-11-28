@@ -1,33 +1,16 @@
-
-
+// ---------- Firebase imports ----------
 import { auth, db } from "./firebase.js";
 import {
-    getFirestore,
-    updateDoc,
     doc,
     getDoc,
-    setDoc
+    setDoc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 let currentUser;
 
-// Load user stats when logged in
-auth.onAuthStateChanged(async (user) => {
-    if (user) {
-        currentUser = user;
-
-        const ref = doc(db, "users", user.uid);
-        const snap = await getDoc(ref);
-
-        if (snap.exists()) {
-            const data = snap.data();
-            correctCount.textContent = data.correct;
-            wrongCount.textContent = data.wrong;
-            skillCount.textContent = data.skill;
-            lifePoints.textContent = data.life;
-        }
-    }
-});
+const saved = localStorage.getItem('savedGame');
+if (saved) continueGameBtn.style.display = "inline-block";
 
 // ---------- Questions ----------
 const questions = [
@@ -316,7 +299,6 @@ const rightAd = document.getElementById("rightAd");
 
 const continueGameBtn = document.getElementById("continueGameBtn");
 
-const saved = localStorage.getItem("savedGame");
 // ---------- Show question ----------
 function showQuestion() {
     const q = questions[currentIndex];
@@ -339,14 +321,12 @@ function checkAnswer(selected, correct) {
         skillCount += skillMultiplier;
         message.textContent = "Correct! +1 skill!";
         saveStats();
-        saveGameToLocal();
 
     } else {
         wrongCount++;
         lifePoints--;
         message.textContent = `Wrong! -1 Life Point!`;
         saveStats();
-        saveGameToLocal();
     }
 
     correctDisplay.textContent = correctCount;
@@ -500,23 +480,22 @@ runFuncBtn.onclick = () => {
 
 continueGameBtn.onclick = () => {
     try {
+        if (!currentUser) return alert("You must be logged in to continue!");
+
         const raw = localStorage.getItem('savedGame');
-        console.log('Continue clicked. raw savedGame:', raw);
 
         if (!raw) {
-            console.warn('No saved game found in localStorage.');
             return;
         }
 
         const saved = JSON.parse(raw);
 
-        // Validate required keys
+        // Validate required numeric fields
         if (typeof saved.questionIndex !== 'number' ||
             typeof saved.correct !== 'number' ||
             typeof saved.wrong !== 'number' ||
             typeof saved.skill !== 'number' ||
             typeof saved.life !== 'number') {
-            console.error('Saved game missing required numeric fields:', saved);
             return;
         }
 
@@ -533,24 +512,22 @@ continueGameBtn.onclick = () => {
         skillDisplay.textContent = skillCount;
         lifeDisplay.textContent = lifePoints;
 
-        // Make sure index is within bounds
+        // Ensure currentIndex is within bounds
         if (currentIndex < 0) currentIndex = 0;
         if (currentIndex >= questions.length) {
-            console.warn('Saved questionIndex out of range, resetting to last question.');
             currentIndex = Math.max(0, questions.length - 1);
         }
 
-        // showQuestion uses currentIndex global — call without args
+        // Show the current question
         showQuestion();
 
-        // Hide main-menu/continue and show panel
+        // Hide main menu / continue button, show panel
         startBtn.style.display = "none";
         continueGameBtn.style.display = "none";
         panel.style.display = "block";
 
-        console.log('Game restored. currentIndex =', currentIndex);
     } catch (err) {
-        console.error('Error while restoring saved game:', err);
+        // silently ignore errors
     }
 };
 // --- Initialize display on page load ---
@@ -587,29 +564,70 @@ adBanner.addEventListener("click", () => {
 });
 
 
-async function saveStats() {
-    if (!currentUser) return;
-
-    await setDoc(doc(db, "users", currentUser.uid), {
-        correct: correctCount,
-        wrong: wrongCount,
-        skill: skillCount,
-        life: lifePoints,
-    }, { merge: true });
-}
+onAuthStateChanged(async (user) => {
+    if (user) {
+        currentUser = user;
+        await loadStats();
+    } else {
+        currentUser = null;
+    }
+});
 
 if (saved) {
     continueGameBtn.style.display = "inline-block";
 }
 
-function saveGameToLocal() {
-    const payload = {
-        questionIndex: currentIndex,
-        correct: correctCount,
-        wrong: wrongCount,
-        skill: skillCount,
-        life: lifePoints
-    };
-    localStorage.setItem('savedGame', JSON.stringify(payload));
+async function saveStats() {
+    if (!currentUser) return;
+
+    try {
+        const userDocRef = doc(db, "users", currentUser.uid);
+        await setDoc(userDocRef, {
+            correct: correctCount,
+            wrong: wrongCount,
+            skill: skillCount,
+            life: lifePoints,
+            questionIndex: currentIndex
+        }, { merge: true });
+
+        console.log("Stats saved successfully!");
+    } catch (err) {
+        console.error("Error saving stats:", err);
+    }
 }
+
+async function loadStats() {
+    if (!currentUser) return;
+
+    try {
+        const userDocRef = doc(db, "users", currentUser.uid);
+        const snap = await getDoc(userDocRef);
+
+        if (snap.exists()) {
+            const data = snap.data();
+            correctCount = data.correct || 0;
+            wrongCount = data.wrong || 0;
+            skillCount = data.skill || 0;
+            lifePoints = data.life || 5;
+            currentIndex = data.questionIndex || 0;
+
+            correctDisplay.textContent = correctCount;
+            wrongDisplay.textContent = wrongCount;
+            skillDisplay.textContent = skillCount;
+            lifeDisplay.textContent = lifePoints;
+
+            if (currentIndex > 0 || correctCount > 0 || wrongCount > 0) {
+                continueGameBtn.style.display = "inline-block";
+            } else {
+                continueGameBtn.style.display = "none";
+            }
+        } else {
+            console.log("No user stats found, starting fresh.");
+            continueGameBtn.style.display = "none";
+        }
+    } catch (err) {
+        console.error("Error loading stats:", err);
+    }
+}
+
 

@@ -56,11 +56,14 @@ if (signupBtn) {
     };
 }
 
+let currentUser = null;
 // AUTO REDIRECT — Protect game page
-onAuthStateChanged(auth, async (user) => {
-    const isProtectedPage = location.pathname.includes("index.html");
-
-    if (!user && isProtectedPage) {
-        location.href = "LoginPage.html";
+onAuthStateChanged(async (user) => {
+    if (user) {
+        currentUser = user;
+        await loadStats(); // load their saved stats
+    } else {
+        currentUser = null;
+        console.log("No user logged in");
     }
 });
