@@ -1,3 +1,5 @@
+## Start Studying! : https://j-code26.github.io/Skill-Issue-Web/ 
+
 # Skill Issue Study Tool Game
 
 Skill Issue is a 2D study tool game for educational and entertainment purposes. The basis of this game is that the
@@ -33,3 +35,6 @@ in the right place to recieve the data to Firebase.
 1. Clone the repository
 2. Open the HTML,CSS, and JS files
 3. Run the HTML file in a live server extension
+
+   # OR
+## Visit the live website!: https://j-code26.github.io/Skill-Issue-Web/ 
