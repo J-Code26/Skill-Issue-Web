@@ -478,17 +478,22 @@ runFuncBtn.onclick = () => {
     popup.classList.add("hidden");
 };
 
-continueGameBtn.onclick = () => {
+continueGameBtn.onclick = async () => {
     try {
-        if (!currentUser) return alert("You must be logged in to continue!");
-
-        const raw = localStorage.getItem('savedGame');
-
-        if (!raw) {
+        if (!currentUser) {
+            alert("You must be logged in to continue!");
             return;
         }
 
-        const saved = JSON.parse(raw);
+        const userDocRef = doc(db, "users", currentUser.uid);
+        const snap = await getDoc(userDocRef);
+
+        if (!snap.exists) {
+            alert("No saved game found!");
+            return;
+        }
+
+        const saved = snap.data();
 
         // Validate required numeric fields
         if (typeof saved.questionIndex !== 'number' ||
@@ -496,6 +501,7 @@ continueGameBtn.onclick = () => {
             typeof saved.wrong !== 'number' ||
             typeof saved.skill !== 'number' ||
             typeof saved.life !== 'number') {
+            alert("Invalid save data!");
             return;
         }
 
@@ -522,12 +528,14 @@ continueGameBtn.onclick = () => {
         showQuestion();
 
         // Hide main menu / continue button, show panel
+        document.getElementById("menuContainer").style.display = "none";
         startBtn.style.display = "none";
         continueGameBtn.style.display = "none";
         panel.style.display = "block";
 
     } catch (err) {
-        // silently ignore errors
+        console.error("Error continuing game:", err);
+        alert("Failed to load saved game!");
     }
 };
 // --- Initialize display on page load ---
@@ -563,8 +571,7 @@ adBanner.addEventListener("click", () => {
     window.open("https://github.com/J-Code26/Skill-Issue-Web.git", "_blank");
 });
 
-
-onAuthStateChanged(async (user) => {
+onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUser = user;
         await loadStats();
@@ -603,7 +610,7 @@ async function loadStats() {
         const userDocRef = doc(db, "users", currentUser.uid);
         const snap = await getDoc(userDocRef);
 
-        if (snap.exists()) {
+        if (snap.exists) {
             const data = snap.data();
             correctCount = data.correct || 0;
             wrongCount = data.wrong || 0;
@@ -629,5 +636,4 @@ async function loadStats() {
         console.error("Error loading stats:", err);
     }
 }
-
 
