@@ -9,9 +9,6 @@ import {
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 let currentUser;
 
-const saved = localStorage.getItem('savedGame');
-if (saved) continueGameBtn.style.display = "inline-block";
-
 // ---------- Questions ----------
 const questions = [
     {
@@ -580,10 +577,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-if (saved) {
-    continueGameBtn.style.display = "inline-block";
-}
-
 async function saveStats() {
     if (!currentUser) return;
 
@@ -623,6 +616,7 @@ async function loadStats() {
             skillDisplay.textContent = skillCount;
             lifeDisplay.textContent = lifePoints;
 
+            // Show continue button if there's progress
             if (currentIndex > 0 || correctCount > 0 || wrongCount > 0) {
                 continueGameBtn.style.display = "inline-block";
             } else {
