@@ -307,6 +307,16 @@ const shop = document.getElementById("shop");
 const lifeDisplay = document.getElementById("lifePoints");
 const skillCountDisplay = document.getElementById("skillCount");
 const loginBtn = document.getElementById("loginBtn");
+const subscriptionBtn = document.getElementById("subscriptionBtn");
+const popup = document.getElementById("popupWindow");
+const closeBtn = document.getElementById("closePopupBtn");
+const runFuncBtn = document.getElementById("runFuncBtn");
+const leftAd = document.getElementById("leftAd");
+const rightAd = document.getElementById("rightAd");
+
+const continueGameBtn = document.getElementById("continueGameBtn");
+
+const saved = localStorage.getItem("savedGame");
 // ---------- Show question ----------
 function showQuestion() {
     const q = questions[currentIndex];
@@ -329,12 +339,14 @@ function checkAnswer(selected, correct) {
         skillCount += skillMultiplier;
         message.textContent = "Correct! +1 skill!";
         saveStats();
+        saveGameToLocal();
 
     } else {
         wrongCount++;
         lifePoints--;
         message.textContent = `Wrong! -1 Life Point!`;
         saveStats();
+        saveGameToLocal();
     }
 
     correctDisplay.textContent = correctCount;
@@ -455,22 +467,12 @@ continueBtn.onclick = () => {
 }
 
 mainMenuBtn.onclick = () => {
-    showWelcomeMessage();
     panel.style.display = "none";
-    startBtn.style.display = "inline-block";
     shop.style.display = "none";
 
-    currentIndex = 0;
-    correctCount = 0;
-    wrongCount = 0;
-    skillCount = 0;
-    lifePoints = 5;
-    skillMultiplier = 1;
-
-    correctDisplay.textContent = correctCount;
-    wrongDisplay.textContent = wrongCount;
-    skillDisplay.textContent = skillCount;
-    lifeDisplay.textContent = lifePoints;
+    document.getElementById("menuContainer").style.display = "block";
+    startBtn.style.display = "none";
+    continueGameBtn.style.display = "inline-block";
 };
 
 loginBtn.onclick = () => {
@@ -478,6 +480,79 @@ loginBtn.onclick = () => {
 
 }
 
+subscriptionBtn.onclick = () => {
+    popup.classList.remove("hidden");
+}
+
+closeBtn.onclick = () => {
+    popup.classList.add("hidden");
+};
+
+runFuncBtn.onclick = () => {
+    adBanner.classList.add("hidden");
+    leftAd.classList.add("hidden");
+    rightAd.classList.add("hidden");
+    subscriptionBtn.disabled = true;
+    subscriptionBtn.textContent = "(Subscribed)";
+    subscriptionBtn.style.opacity = "0.5";
+    popup.classList.add("hidden");
+};
+
+continueGameBtn.onclick = () => {
+    try {
+        const raw = localStorage.getItem('savedGame');
+        console.log('Continue clicked. raw savedGame:', raw);
+
+        if (!raw) {
+            console.warn('No saved game found in localStorage.');
+            return;
+        }
+
+        const saved = JSON.parse(raw);
+
+        // Validate required keys
+        if (typeof saved.questionIndex !== 'number' ||
+            typeof saved.correct !== 'number' ||
+            typeof saved.wrong !== 'number' ||
+            typeof saved.skill !== 'number' ||
+            typeof saved.life !== 'number') {
+            console.error('Saved game missing required numeric fields:', saved);
+            return;
+        }
+
+        // Restore stats safely
+        currentIndex = saved.questionIndex;
+        correctCount = saved.correct;
+        wrongCount = saved.wrong;
+        skillCount = saved.skill;
+        lifePoints = saved.life;
+
+        // Update UI numbers
+        correctDisplay.textContent = correctCount;
+        wrongDisplay.textContent = wrongCount;
+        skillDisplay.textContent = skillCount;
+        lifeDisplay.textContent = lifePoints;
+
+        // Make sure index is within bounds
+        if (currentIndex < 0) currentIndex = 0;
+        if (currentIndex >= questions.length) {
+            console.warn('Saved questionIndex out of range, resetting to last question.');
+            currentIndex = Math.max(0, questions.length - 1);
+        }
+
+        // showQuestion uses currentIndex global — call without args
+        showQuestion();
+
+        // Hide main-menu/continue and show panel
+        startBtn.style.display = "none";
+        continueGameBtn.style.display = "none";
+        panel.style.display = "block";
+
+        console.log('Game restored. currentIndex =', currentIndex);
+    } catch (err) {
+        console.error('Error while restoring saved game:', err);
+    }
+};
 // --- Initialize display on page load ---
 function initializeDisplay() {
     correctDisplay.textContent = correctCount;
@@ -521,5 +596,20 @@ async function saveStats() {
         skill: skillCount,
         life: lifePoints,
     }, { merge: true });
+}
+
+if (saved) {
+    continueGameBtn.style.display = "inline-block";
+}
+
+function saveGameToLocal() {
+    const payload = {
+        questionIndex: currentIndex,
+        correct: correctCount,
+        wrong: wrongCount,
+        skill: skillCount,
+        life: lifePoints
+    };
+    localStorage.setItem('savedGame', JSON.stringify(payload));
 }
 

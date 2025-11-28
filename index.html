@@ -10,7 +10,7 @@
 <div class="page-layout">
 
     <!-- LEFT AD -->
-    <div class="side-ad left-ad">
+    <div id= "leftAd" class="side-ad left-ad">
         <img src="ads/ad_part_1.png" alt="Left Ad">
         <img src="ads/ad_part_2.png" alt="Left Ad 2">
     </div>
@@ -19,10 +19,15 @@
     <div class="main-content">
 
         <h1>Skill Issue Main Menu</h1>
-        <div>
+        <button id="mainMenuBtn" aria-label="Main Menu">Main Menu</button>
+        <div id="menuContainer" style="text-align:center;">
             <button id="startBtn">Start Game</button>
-            <button id="mainMenuBtn" aria-label="Main Menu">Main Menu</button>
-            <button id="loginBtn" aria-label="loginBtn">Login / Sign-up</button>
+            <button id="continueGameBtn" style="display:none;">Continue</button>
+        </div>
+
+        <div class="top-right-buttons">
+            <button id="loginBtn">Login</button>
+            <button id="subscriptionBtn">Subscribe</button>
         </div>
       
         <div id="panel" style="display: none;">
@@ -55,11 +60,20 @@
     </div>
 
     <!-- RIGHT AD -->
-    <div class="side-ad right-ad">
+    <div id= "rightAd" class="side-ad right-ad">
         <img src="ads/ad_part_3.png" alt="Right Ad">
         <img src="ads/ad_part_4.png" alt="Right Ad 2">
     </div>
 
+</div>
+
+<div id="popupWindow" class="hidden">
+    <div class="popup-box">
+        <h3>Skill Issue Subscription</h3>
+        <p>Remove all Advertisements - $4.99</p>
+        <button id="runFuncBtn">Accept</button>
+        <button id="closePopupBtn">Close</button>
+    </div>
 </div>
 <script type="module" src="firebase.js"></script>
 <script type="module" src="script.js"></script>
